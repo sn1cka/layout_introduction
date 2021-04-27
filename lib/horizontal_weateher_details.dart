@@ -9,6 +9,7 @@ class HorizontalWeatherScroll extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
       shrinkWrap: true,
       primary: true,
       itemCount: list.length,
@@ -18,6 +19,8 @@ class HorizontalWeatherScroll extends StatelessWidget {
         return Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Card(
+                elevation: 10,
+                borderOnForeground: false,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(16))),
                 child: Center(

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'horizontal_weateher_details.dart';
+
 class WeatherDetails extends StatelessWidget {
   String weatherState = 'Sunny';
   var temp = 33;
@@ -16,6 +18,19 @@ class WeatherDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<WeatherDetailModel> itemList = [];
+    var weatherItem = WeatherDetailModel(
+        dayOfWeek: 'Monday',
+        temp: 21,
+        icon: Icon(Icons.wb_cloudy),
+        tempMax: 25,
+        tempMin: 13);
+
+    for (int i = 0; i < 10; i++) {
+      itemList.add(weatherItem);
+    }
+
+
     List<Widget> item = [
       SizedBox(height: 20),
       Row(
@@ -41,12 +56,12 @@ class WeatherDetails extends StatelessWidget {
               flex: 1,
               child: Column(children: [
                 Text(
-                  '$tempMax°C',
+                  '$tempMax°C↑',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16),
                 ),
                 Text(
-                  '$tempMin°C',
+                  '$tempMin°C↓',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16),
                 )
@@ -59,9 +74,9 @@ class WeatherDetails extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Column(children: [
-                Icon(Icons.settings_input_antenna_sharp),
+                Image.asset('icons/Group.png'),
                 Text(
-                  weatherState,
+                  '$airHumidity%',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 )
@@ -69,9 +84,9 @@ class WeatherDetails extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Column(children: [
-                Icon(Icons.wb_sunny_outlined),
+                Image.asset('icons/050-barometer.png'),
                 Text(
-                  weatherState,
+                  bars.toStringAsFixed(3),
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 )
@@ -79,9 +94,9 @@ class WeatherDetails extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Column(children: [
-                Icon(Icons.wb_sunny_outlined),
+                Image.asset('icons/001-wind-1.png'),
                 Text(
-                  weatherState,
+                  '$windSpeed km/h',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 )
@@ -94,9 +109,9 @@ class WeatherDetails extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Column(children: [
-                Icon(Icons.wb_sunny_outlined),
+                Image.asset('icons/007-sunset.png'),
                 Text(
-                  weatherState,
+                  sunrise,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 )
@@ -104,9 +119,9 @@ class WeatherDetails extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Column(children: [
-                Icon(Icons.wb_sunny_outlined),
+                Image.asset('icons/008-sunrise.png'),
                 Text(
-                  weatherState,
+                  sunset,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 )
@@ -114,16 +129,19 @@ class WeatherDetails extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Column(children: [
-                Icon(Icons.wb_sunny_outlined),
+                Image.asset('icons/sand-clock.png'),
                 Text(
-                  weatherState,
+                  dayTime,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 18),
                 )
               ]))
         ],
       ),
-      SizedBox(height: 40)
+      SizedBox(height: 20),
+      Container(
+          height: 100,
+          child: HorizontalWeatherScroll(itemList))
     ];
 
     return Column(children: item);
