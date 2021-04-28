@@ -1,16 +1,14 @@
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:layout_introduction/api.dart';
-import 'package:layout_introduction/api_utils/response_data.dart';
 import 'package:layout_introduction/detailed_weather_data_model.dart';
 import 'package:layout_introduction/weather_details_container.dart';
-import 'package:logger/logger.dart';
-
-final logger = Logger();
-
+//todo rework whole class to code beatify
+//todo add bloc and hive
+//todo add location change
 void main() {
   runApp(MyApp());
 }
@@ -42,30 +40,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DetailedWeatherDataModel data;
+  GoogleMapController mapController;
 
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
-  var random = Random();
-  var color = Colors.accents.first;
-
-  FutureBuilder<ResponseData> buildWeatherView(BuildContext context) {
-    final dio = Dio(BaseOptions())..interceptors.add(LogInterceptor(responseBody: true, responseHeader: true));
-    final client = ApiClient(dio);
-    return FutureBuilder<ResponseData>(
-      future: client.getWeather(10, 10),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            !snapshot.hasError) {
-          print('${snapshot.data.toJson()} ©');
-          return WeatherDetails(snapshot.data.data.first);
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
-    );
-  }
+  var dateTimeNow =
+      DateFormat('EEEE, dd MMMM yyyy | HH:mm').format(DateTime.now());
+  var lat = 42.88208;
+  var lon = 74.582;
+  var currentLoc = '';
+  LatLng position = LatLng(42.88208, 74.582);
 
   Future<Null> refreshWeather() async {
     refreshKey.currentState?.show(atTop: false);
@@ -88,37 +75,86 @@ class _HomePageState extends State<HomePage> {
                           ? AssetImage('images/background_day/graphic.png')
                           : AssetImage('images/background_night/graphic.png')),
                   alignment: Alignment.topCenter,
-                  heightFactor: 1,
                 ),
                 Align(
                     alignment: Alignment.bottomCenter,
-                    heightFactor: 1.62,
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(16),
-                                topRight: Radius.circular(16))),
-                        child: Column(children: [
-                          Row(
+                    heightFactor: 1.50,
+                    child: Column(children: [
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(16))),
+                          child: Row(
                             children: [
                               Expanded(
                                   child: TextButton(
                                       onPressed: () {},
                                       child: Text(
-                                        DateTime.now().toString(),
-                                        style: TextStyle(fontSize: 17),
+                                        dateTimeNow,
+                                        style: TextStyle(fontSize: 14),
                                       ))),
                               Expanded(
-                                  child: TextButton(
-                                      onPressed: () {},
-                                      child: Text('Test text',
-                                          style: TextStyle(fontSize: 17))))
+                                  child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(16),
+                                        topRight: Radius.circular(16))),
+                                child: TextButton(
+                                  child: Text(currentLoc,
+                                      style: TextStyle(fontSize: 14)),
+                                  onPressed: () {
+                                    showModalBottomSheet(
+                                      //todo rework API key
+
+                                        context: context,
+                                        builder: (context) {
+                                          return Expanded(
+                                              child: GoogleMap(
+                                            onMapCreated: _onMapCreated,
+                                            initialCameraPosition:
+                                                CameraPosition(
+                                                    target: position, zoom: 11),
+                                          ));
+                                        },
+                                        isScrollControlled: true);
+                                  },
+                                ),
+                              ))
                             ],
-                          ),
-                          buildWeatherView(context)
-                        ])))
+                          )),
+                      Container(
+                          child: buildWeatherView(context),
+                          color: Colors.white),
+                    ]))
               ])
             ])));
+  }
+
+  FutureBuilder<DetailedWeatherDataModel> buildWeatherView(
+      BuildContext context) {
+    final dio = Dio(BaseOptions())
+      ..interceptors
+          .add(LogInterceptor(responseBody: true, responseHeader: true));
+    final client = ApiClient(dio);
+    return FutureBuilder<DetailedWeatherDataModel>(
+      future: client.getWeather(lat, lon),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            !snapshot.hasError) {
+          print(snapshot.error.toString() + '©');
+          currentLoc = '${snapshot.data.sys.country}, ${snapshot.data.name}';
+
+          return WeatherDetails(snapshot.data);
+        } else {
+          return Center(
+              child: SizedBox(
+            height: 370,
+            child: Center(child: CircularProgressIndicator()),
+          ));
+        }
+      },
+    );
   }
 }

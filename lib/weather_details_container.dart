@@ -7,24 +7,41 @@ import 'horizontal_weateher_details.dart';
 
 class WeatherDetails extends StatelessWidget {
   WeatherDetails(this.data) {
-    // this.weatherState = data.weather.first.description;
-    this.temp = data.main.temp;
-    // this.tempMax = data.main.tempMax;
-    // this.tempMin = data.main.tempMin;
+    var main = data.main;
+    var wind = data.wind;
+
+    this.weatherState = data.weather.first.description;
+    this._temp = main.temp.toInt();
+    this._tempMax = main.tempMax;
+    this._tempMin = main.tempMin;
+    this._windSpeed = wind.speed;
+    this._airHumidity = main.humidity;
+    this._pressure = main.pressure;
+
+
+    var time = DateTime.fromMillisecondsSinceEpoch(data.sys.sunset * 1000);
+    this._sunset = '${time.hour}:${time.minute}';
+
+    time = DateTime.fromMillisecondsSinceEpoch(data.sys.sunrise * 1000);
+    this._sunrise = '${time.hour}:${time.minute}';
+
+    time =
+        DateTime.fromMillisecondsSinceEpoch((data.dt + data.timezone) * 1000).toUtc();
+    this._dayTime = '${time.hour}h ${time.minute}m ';
   }
 
-  String weatherState = '';
-  num temp = 27;
-  var tempMax = 22;
-  var tempMin = 23;
-  var airHumidity = 49;
-  var bars = 1.007;
-  var windSpeed = 23;
-  var sunrise = '6:03';
-  var sunset = '7:05';
-  var dayTime = '13h 1m';
-
   final DetailedWeatherDataModel data;
+
+  String weatherState = '';
+  num _temp = 27;
+  num _tempMax = 22;
+  num _tempMin = 23;
+  num _airHumidity = 49;
+  num _pressure = 1.007;
+  num _windSpeed = 23;
+  var _sunrise = '6:03';
+  var _sunset = '7:05';
+  var _dayTime = '13h 1m';
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +57,7 @@ class WeatherDetails extends StatelessWidget {
       itemList.add(weatherItem);
     }
 
-    List<Widget> item = [
+    return Column(children: [
       SizedBox(height: 20),
       Row(
         children: [
@@ -57,20 +74,20 @@ class WeatherDetails extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Text(
-                '$temp',
+                '$_temp°C',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 64, letterSpacing: 1),
+                style: TextStyle(fontSize: 35, letterSpacing: 1),
               )),
           Expanded(
               flex: 1,
               child: Column(children: [
                 Text(
-                  '$tempMax°C↑',
+                  '$_tempMax°C↑',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16),
                 ),
                 Text(
-                  '$tempMin°C↓',
+                  '$_tempMin°C↓',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16),
                 )
@@ -80,77 +97,37 @@ class WeatherDetails extends StatelessWidget {
       SizedBox(height: 40),
       Row(
         children: [
-          Expanded(
-              flex: 1,
-              child: Column(children: [
-                Image.asset('icons/Group.png'),
-                Text(
-                  '$airHumidity%',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
-                )
-              ])),
-          Expanded(
-              flex: 1,
-              child: Column(children: [
-                Image.asset('icons/050-barometer.png'),
-                Text(
-                  bars.toStringAsFixed(3),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
-                )
-              ])),
-          Expanded(
-              flex: 1,
-              child: Column(children: [
-                Image.asset('icons/001-wind-1.png'),
-                Text(
-                  '$windSpeed km/h',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
-                )
-              ]))
+          _createItem('icons/027-humidity.png', 'Humidity', '$_airHumidity%'),
+          _createItem('icons/050-barometer.png', 'Pressure',
+              _pressure.toStringAsFixed(1)),
+          _createItem('icons/001-wind-1.png', 'Wind', '$_windSpeed km/h'),
         ],
       ),
       SizedBox(height: 40),
-      Row(
-        children: [
-          Expanded(
-              flex: 1,
-              child: Column(children: [
-                Image.asset('icons/007-sunset.png'),
-                Text(
-                  sunrise,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
-                )
-              ])),
-          Expanded(
-              flex: 1,
-              child: Column(children: [
-                Image.asset('icons/008-sunrise.png'),
-                Text(
-                  sunset,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
-                )
-              ])),
-          Expanded(
-              flex: 1,
-              child: Column(children: [
-                Image.asset('icons/sand-clock.png'),
-                Text(
-                  dayTime,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18),
-                )
-              ]))
-        ],
-      ),
+      Row(children: [
+        _createItem('icons/007-sunset.png', 'Sunrise', _sunrise),
+        _createItem('icons/008-sunrise.png', 'Sunset', _sunset),
+        _createItem('icons/sand-clock.png', 'DayTime', _dayTime)
+      ]),
       SizedBox(height: 20),
       Container(height: 100, child: HorizontalWeatherScroll(itemList))
-    ];
+    ]);
+  }
 
-    return Column(children: item);
+  Widget _createItem(String asset, String title, String value) {
+    return Expanded(
+        flex: 1,
+        child: Column(children: [
+          Image.asset(asset, height: 24 ),
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
+          Text(
+            title,
+            style: TextStyle(color: Colors.grey, fontSize: 8, fontWeight: FontWeight.bold),
+          )
+        ]));
   }
 }

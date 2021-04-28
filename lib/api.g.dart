@@ -17,7 +17,7 @@ class _ApiClient implements ApiClient {
   String baseUrl;
 
   @override
-  Future<ResponseData> getWeather(latitude, longitude,
+  Future<DetailedWeatherDataModel> getWeather(latitude, longitude,
       {lang = "ru", units = "metric"}) async {
     ArgumentError.checkNotNull(latitude, 'latitude');
     ArgumentError.checkNotNull(longitude, 'longitude');
@@ -38,7 +38,7 @@ class _ApiClient implements ApiClient {
             extra: _extra,
             baseUrl: baseUrl),
         data: _data);
-    final value = ResponseData.fromJson(_result.data);
+    final value = DetailedWeatherDataModel.fromJson(_result.data);
     return value;
   }
 }

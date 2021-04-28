@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'api_utils/response_data.dart';
 import 'detailed_weather_data_model.dart';
+
 
 part 'api.g.dart';
 
@@ -23,7 +24,7 @@ abstract class ApiClient {
   }
 
   @GET(Apis.weather)
-  Future<ResponseData> getWeather(
+  Future<DetailedWeatherDataModel> getWeather(
       @Query("lat") num latitude, @Query("lon") num longitude,
       {@Query("lang") String lang = "ru",
       @Query("units") String units = "metric"});
