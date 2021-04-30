@@ -7,7 +7,6 @@ import 'package:layout_introduction/models/detailed_weather_data_model.dart';
 import 'package:meta/meta.dart';
 
 part 'weather_event.dart';
-
 part 'weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
@@ -15,15 +14,18 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final ApiClient apiClient;
 
   @override
-  Stream<WeatherState> mapEventToState(WeatherEvent event,) async* {
+  Stream<WeatherState> mapEventToState(
+    WeatherEvent event,
+  ) async* {
     if (event is LoadWeatherEvent) {
       yield WeatherLoading();
       try {
-        final DetailedWeatherDataModel weather = await apiClient.getWeather(
-            10.0, 10.0);
+        final DetailedWeatherDataModel weather =
+            await apiClient.getWeather(event.lat, event.lot);
+        print(weather.toJson());
         yield WeatherLoaded(weather: weather);
-      }
-      catch (_){
+      } catch (error) {
+        print(error);
         yield WeatherLoadingError();
       }
     }

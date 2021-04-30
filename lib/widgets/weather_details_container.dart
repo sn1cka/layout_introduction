@@ -5,8 +5,17 @@ import 'package:layout_introduction/models/detailed_weather_data_model.dart';
 
 import 'horizontal_weateher_details.dart';
 
-class WeatherDetails extends StatelessWidget {
-  WeatherDetails(this.data) {
+class WeatherDetails extends StatefulWidget {
+  WeatherDetails(this.data);
+
+  final DetailedWeatherDataModel data;
+
+  @override
+  _WeatherDetailsState createState() => _WeatherDetailsState(data);
+}
+
+class _WeatherDetailsState extends State<WeatherDetails> {
+  _WeatherDetailsState(this.data) {
     var main = data.main;
     var wind = data.wind;
 
@@ -18,15 +27,14 @@ class WeatherDetails extends StatelessWidget {
     this._airHumidity = main.humidity;
     this._pressure = main.pressure;
 
-
     var time = DateTime.fromMillisecondsSinceEpoch(data.sys.sunset * 1000);
     this._sunset = '${time.hour}:${time.minute}';
 
     time = DateTime.fromMillisecondsSinceEpoch(data.sys.sunrise * 1000);
     this._sunrise = '${time.hour}:${time.minute}';
 
-    time =
-        DateTime.fromMillisecondsSinceEpoch((data.dt + data.timezone) * 1000).toUtc();
+    time = DateTime.fromMillisecondsSinceEpoch((data.dt + data.timezone) * 1000)
+        .toUtc();
     this._dayTime = '${time.hour}h ${time.minute}m ';
   }
 
@@ -118,7 +126,7 @@ class WeatherDetails extends StatelessWidget {
     return Expanded(
         flex: 1,
         child: Column(children: [
-          Image.asset(asset, height: 24 ),
+          Image.asset(asset, height: 24),
           Text(
             value,
             textAlign: TextAlign.center,
@@ -126,7 +134,8 @@ class WeatherDetails extends StatelessWidget {
           ),
           Text(
             title,
-            style: TextStyle(color: Colors.grey, fontSize: 8, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.grey, fontSize: 8, fontWeight: FontWeight.bold),
           )
         ]));
   }

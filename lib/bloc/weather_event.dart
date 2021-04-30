@@ -6,7 +6,9 @@ abstract class WeatherEvent extends Equatable {
 }
 
 class LoadWeatherEvent extends WeatherEvent {
-  const LoadWeatherEvent();
+  final num lat;
+  final num lot;
+  const LoadWeatherEvent(this.lat, this.lot);
 
   @override
   List<Object> get props => [];

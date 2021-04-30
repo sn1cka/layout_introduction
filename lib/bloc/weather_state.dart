@@ -10,7 +10,9 @@ abstract class WeatherState extends Equatable {
 
 class WeatherEmpty extends WeatherState {}
 
-class WeatherLoading extends WeatherState {}
+class WeatherLoading extends WeatherState {
+  WeatherLoading();
+}
 
 class WeatherLoaded extends WeatherState {
   final DetailedWeatherDataModel weather;
