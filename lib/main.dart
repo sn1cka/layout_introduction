@@ -1,20 +1,41 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:layout_introduction/api.dart';
-import 'package:layout_introduction/detailed_weather_data_model.dart';
-import 'package:layout_introduction/weather_details_container.dart';
+import 'package:layout_introduction/api/api.dart';
+import 'package:layout_introduction/bloc/weather_bloc.dart';
+import 'package:layout_introduction/models/detailed_weather_data_model.dart';
+import 'package:layout_introduction/widgets/gmap_widget.dart';
+import 'package:layout_introduction/widgets/weather_details_container.dart';
+
 //todo rework whole class to code beatify
-//todo add bloc and hive
+//todo add  and hive
 //todo add location change
+
+class SimpleBlocDelegate extends BlocObserver {
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    // TODO: implement onTransition
+    super.onTransition(bloc, transition);
+    print('bloc transition');
+  }
+}
+
 void main() {
-  runApp(MyApp());
+  Bloc.observer = SimpleBlocDelegate();
+  final ApiClient repo = ApiClient(Dio());
+  runApp(MyApp(repo: repo));
 }
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  MyApp({Key key, @required this.repo});
+
+  final ApiClient repo;
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -40,11 +61,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DetailedWeatherDataModel data;
-  GoogleMapController mapController;
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   var dateTimeNow =
@@ -71,6 +87,7 @@ class _HomePageState extends State<HomePage> {
               Stack(children: [
                 Align(
                   child: Image(
+                      fit: BoxFit.fitWidth,
                       image: (currentHour > 7 && currentHour < 19)
                           ? AssetImage('images/background_day/graphic.png')
                           : AssetImage('images/background_night/graphic.png')),
@@ -78,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Align(
                     alignment: Alignment.bottomCenter,
-                    heightFactor: 1.50,
+                    heightFactor: 1.6,
                     child: Column(children: [
                       Container(
                           decoration: BoxDecoration(
@@ -106,18 +123,17 @@ class _HomePageState extends State<HomePage> {
                                       style: TextStyle(fontSize: 14)),
                                   onPressed: () {
                                     showModalBottomSheet(
-                                      //todo rework API key
-
                                         context: context,
                                         builder: (context) {
-                                          return Expanded(
-                                              child: GoogleMap(
-                                            onMapCreated: _onMapCreated,
-                                            initialCameraPosition:
-                                                CameraPosition(
-                                                    target: position, zoom: 11),
-                                          ));
+                                          return MyGoogleMap(
+                                            lat,
+                                            lon,
+                                            onCoordsChanged: (pos) {
+                                              print(pos.toString());
+                                            },
+                                          );
                                         },
+                                        enableDrag: false,
                                         isScrollControlled: true);
                                   },
                                 ),
@@ -125,8 +141,26 @@ class _HomePageState extends State<HomePage> {
                             ],
                           )),
                       Container(
-                          child: buildWeatherView(context),
-                          color: Colors.white),
+                          color: Colors.white,
+                          child: BlocProvider(
+                              create: (context) =>
+                                  WeatherBloc(apiClient: ApiClient(Dio())),
+                              child: BlocBuilder<WeatherBloc, WeatherState>(
+                                  builder: (context, state) {
+                                if (state is WeatherEmpty) {
+                                  BlocProvider.of<WeatherBloc>(context)
+                                      .add(LoadWeatherEvent());
+                                }
+                                if (state is WeatherLoadingError) {
+                                  print('loading error');
+                                }
+                                if (state is WeatherLoaded) {
+                                  print(state.weather.toJson());
+                                  return WeatherDetails(state.weather);
+
+                                }
+                                return CircularProgressIndicator();
+                              })))
                     ]))
               ])
             ])));
