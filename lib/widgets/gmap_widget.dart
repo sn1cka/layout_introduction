@@ -5,52 +5,26 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MyGoogleMap extends StatefulWidget {
   MyGoogleMap(this.lat, this.lon, {this.onCoordsChanged});
 
-  final Function(double) onCoordsChanged;
+  final Function(double, double) onCoordsChanged;
 
   final double lat;
   final double lon;
 
   @override
-  _MyGoogleMapState createState() =>
-      _MyGoogleMapState(lat, lon, onCoordsChanged);
+  _MyGoogleMapState createState() => _MyGoogleMapState(lat, lon, onCoordsChanged);
 }
 
 class _MyGoogleMapState extends State<MyGoogleMap> {
   GoogleMapController mapController;
-  final Function(double) onCoordsChanged;
+  final Function(double, double) onCoordsChanged;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     child = gmap;
-    mapController.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(zoom: 20, target: LatLng(lat, lon))));
+    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(zoom: 20, target: LatLng(lat, lon))));
   }
 
-  _MyGoogleMapState(this.lat, this.lon, this.onCoordsChanged) {
-    gmap = GoogleMap(
-        onTap: (argument) {
-          lat = argument.latitude;
-          lon = argument.longitude;
-          gmap.markers.clear();
-          setState(() {
-            gmap.markers
-                .add(Marker(markerId: MarkerId('1'), position: argument));
-          });
-        },
-        onCameraMove: (position) {
-          onCoordsChanged(10.0);
-        },
-        myLocationEnabled: true,
-        trafficEnabled: false,
-        mapToolbarEnabled: true,
-        myLocationButtonEnabled: true,
-        zoomGesturesEnabled: true,
-        rotateGesturesEnabled: true,
-        scrollGesturesEnabled: true,
-        onMapCreated: _onMapCreated,
-        initialCameraPosition:
-            CameraPosition(target: LatLng(lat, lon), zoom: 16));
-  }
+  _MyGoogleMapState(this.lat, this.lon, this.onCoordsChanged);
 
   double lat;
   double lon;
@@ -59,6 +33,24 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: gmap);
+
+    return GoogleMap(
+        markers: {Marker(markerId: MarkerId('1'), position: LatLng(lat, lon))},
+        onTap: (argument)async {
+          lat = argument.latitude;
+          lon = argument.longitude;
+          mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: argument,zoom: 16)));
+          onCoordsChanged(lat, lon);
+          setState(() {});
+        },
+        myLocationEnabled: true,
+        trafficEnabled: false,
+        mapToolbarEnabled: false,
+        myLocationButtonEnabled: true,
+        zoomGesturesEnabled: true,
+        rotateGesturesEnabled: true,
+        scrollGesturesEnabled: true,
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(target: LatLng(lat, lon), zoom: 16));
   }
 }

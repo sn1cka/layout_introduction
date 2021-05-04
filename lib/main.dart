@@ -7,7 +7,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:layout_introduction/api/api.dart';
 import 'package:layout_introduction/bloc/weather_bloc.dart';
-import 'package:layout_introduction/models/detailed_weather_data_model.dart';
 import 'package:layout_introduction/widgets/gmap_widget.dart';
 import 'package:layout_introduction/widgets/weather_details_container.dart';
 
@@ -17,20 +16,18 @@ import 'package:layout_introduction/widgets/weather_details_container.dart';
 class SimpleBlocDelegate extends BlocObserver {
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    // TODO: implement onTransition
     super.onTransition(bloc, transition);
     print('bloc transition');
   }
 }
 
-void main() {
+void main() async {
   Bloc.observer = SimpleBlocDelegate();
   final ApiClient repo = ApiClient(Dio());
   runApp(MyApp(repo: repo));
 }
 
 class MyApp extends StatefulWidget {
-  // This widget is the root of your application.
   MyApp({Key key, @required this.repo});
 
   final ApiClient repo;
@@ -59,8 +56,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DetailedWeatherDataModel data;
-
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   var dateTimeNow = DateFormat('EEEE, dd MMMM yyyy | HH:mm').format(DateTime.now());
   var lat = 42.88208;
@@ -71,6 +66,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var currentHour = DateTime.now().hour;
+
     return Scaffold(
         body: BlocProvider(
             create: (context) => WeatherBloc(apiClient: ApiClient(Dio())),
@@ -81,16 +77,16 @@ class _HomePageState extends State<HomePage> {
               }
               if (state is WeatherLoaded) {
                 print(state.weather.toJson());
+                currentLoc = '${state.weather.sys.country}, ${state.weather.name}';
                 detailedWeather = WeatherDetails(state.weather);
               } else
                 detailedWeather = CircularProgressIndicator();
 
               return RefreshIndicator(
                   key: refreshKey,
-                  onRefresh: () {
-                    //todo rework to avoid infinite loading
+                  onRefresh: () async {
                     BlocProvider.of<WeatherBloc>(context).add(LoadWeatherEvent(lat, lon));
-                    return null;
+                    refreshKey.currentState.show(atTop: false);
                   },
                   child: ListView(physics: AlwaysScrollableScrollPhysics(), children: [
                     Stack(children: [
@@ -130,13 +126,18 @@ class _HomePageState extends State<HomePage> {
                                         onPressed: () {
                                           showModalBottomSheet(
                                               context: context,
-                                              builder: (context) {
-                                                //todo add location change
+                                              builder: (mContext) {
                                                 return MyGoogleMap(
                                                   lat,
                                                   lon,
-                                                  onCoordsChanged: (pos) {
-                                                    print(pos.toString());
+                                                  onCoordsChanged: (lat, lon) async {
+                                                    BlocProvider.of<WeatherBloc>(context)
+                                                        .add(LoadWeatherEvent(lat, lon));
+                                                    this.lat = lat;
+                                                    this.lon = lon;
+                                                    print('Coords changed: $lat  $lon');
+                                                    await Future.delayed(Duration(milliseconds: 1000));
+                                                    Navigator.pop(mContext);
                                                   },
                                                 );
                                               },

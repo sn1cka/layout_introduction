@@ -27,6 +27,5 @@ abstract class ApiClient {
       {@Query('lang') String lang = 'ru',
       @Query('units') String units = 'metric'});
 
-//todo add apiclient like field of class (to singletone)
 
 }
