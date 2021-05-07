@@ -21,8 +21,7 @@ class HorizontalWeatherScroll extends StatelessWidget {
             child: Card(
                 elevation: 10,
                 borderOnForeground: false,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16))),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
                 child: Center(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

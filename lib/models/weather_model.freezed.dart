@@ -17,8 +17,8 @@ class _$WeatherDataTearOff {
   const _$WeatherDataTearOff();
 
 // ignore: unused_element
-  _WeatherData call(Coord coord, List<Weather> weather, Main main, Wind wind,
-      int dt, Sys sys, int timezone, int id, String name, int cod) {
+  _WeatherData call(Coordinates coord, List<Weather> weather, Main main,
+      Wind wind, int dt, Sys sys, int timezone, int id, String name, int cod) {
     return _WeatherData(
       coord,
       weather,
@@ -45,7 +45,7 @@ const $WeatherData = _$WeatherDataTearOff();
 
 /// @nodoc
 mixin _$WeatherData {
-  Coord get coord;
+  Coordinates get coord;
   List<Weather> get weather;
   Main get main;
   Wind get wind;
@@ -67,7 +67,7 @@ abstract class $WeatherDataCopyWith<$Res> {
           WeatherData value, $Res Function(WeatherData) then) =
       _$WeatherDataCopyWithImpl<$Res>;
   $Res call(
-      {Coord coord,
+      {Coordinates coord,
       List<Weather> weather,
       Main main,
       Wind wind,
@@ -78,7 +78,7 @@ abstract class $WeatherDataCopyWith<$Res> {
       String name,
       int cod});
 
-  $CoordCopyWith<$Res> get coord;
+  $CoordinatesCopyWith<$Res> get coord;
   $MainCopyWith<$Res> get main;
   $WindCopyWith<$Res> get wind;
   $SysCopyWith<$Res> get sys;
@@ -106,7 +106,7 @@ class _$WeatherDataCopyWithImpl<$Res> implements $WeatherDataCopyWith<$Res> {
     Object cod = freezed,
   }) {
     return _then(_value.copyWith(
-      coord: coord == freezed ? _value.coord : coord as Coord,
+      coord: coord == freezed ? _value.coord : coord as Coordinates,
       weather: weather == freezed ? _value.weather : weather as List<Weather>,
       main: main == freezed ? _value.main : main as Main,
       wind: wind == freezed ? _value.wind : wind as Wind,
@@ -120,11 +120,11 @@ class _$WeatherDataCopyWithImpl<$Res> implements $WeatherDataCopyWith<$Res> {
   }
 
   @override
-  $CoordCopyWith<$Res> get coord {
+  $CoordinatesCopyWith<$Res> get coord {
     if (_value.coord == null) {
       return null;
     }
-    return $CoordCopyWith<$Res>(_value.coord, (value) {
+    return $CoordinatesCopyWith<$Res>(_value.coord, (value) {
       return _then(_value.copyWith(coord: value));
     });
   }
@@ -168,7 +168,7 @@ abstract class _$WeatherDataCopyWith<$Res>
       __$WeatherDataCopyWithImpl<$Res>;
   @override
   $Res call(
-      {Coord coord,
+      {Coordinates coord,
       List<Weather> weather,
       Main main,
       Wind wind,
@@ -180,7 +180,7 @@ abstract class _$WeatherDataCopyWith<$Res>
       int cod});
 
   @override
-  $CoordCopyWith<$Res> get coord;
+  $CoordinatesCopyWith<$Res> get coord;
   @override
   $MainCopyWith<$Res> get main;
   @override
@@ -213,7 +213,7 @@ class __$WeatherDataCopyWithImpl<$Res> extends _$WeatherDataCopyWithImpl<$Res>
     Object cod = freezed,
   }) {
     return _then(_WeatherData(
-      coord == freezed ? _value.coord : coord as Coord,
+      coord == freezed ? _value.coord : coord as Coordinates,
       weather == freezed ? _value.weather : weather as List<Weather>,
       main == freezed ? _value.main : main as Main,
       wind == freezed ? _value.wind : wind as Wind,
@@ -248,7 +248,7 @@ class _$_WeatherData implements _WeatherData {
       _$_$_WeatherDataFromJson(json);
 
   @override
-  final Coord coord;
+  final Coordinates coord;
   @override
   final List<Weather> weather;
   @override
@@ -328,7 +328,7 @@ class _$_WeatherData implements _WeatherData {
 
 abstract class _WeatherData implements WeatherData {
   const factory _WeatherData(
-      Coord coord,
+      Coordinates coord,
       List<Weather> weather,
       Main main,
       Wind wind,
@@ -343,7 +343,7 @@ abstract class _WeatherData implements WeatherData {
       _$_WeatherData.fromJson;
 
   @override
-  Coord get coord;
+  Coordinates get coord;
   @override
   List<Weather> get weather;
   @override
@@ -367,56 +367,57 @@ abstract class _WeatherData implements WeatherData {
   _$WeatherDataCopyWith<_WeatherData> get copyWith;
 }
 
-Coord _$CoordFromJson(Map<String, dynamic> json) {
-  return _Coord.fromJson(json);
+Coordinates _$CoordinatesFromJson(Map<String, dynamic> json) {
+  return _Coordinates.fromJson(json);
 }
 
 /// @nodoc
-class _$CoordTearOff {
-  const _$CoordTearOff();
+class _$CoordinatesTearOff {
+  const _$CoordinatesTearOff();
 
 // ignore: unused_element
-  _Coord call(num lat, num lon) {
-    return _Coord(
+  _Coordinates call(num lat, num lon) {
+    return _Coordinates(
       lat,
       lon,
     );
   }
 
 // ignore: unused_element
-  Coord fromJson(Map<String, Object> json) {
-    return Coord.fromJson(json);
+  Coordinates fromJson(Map<String, Object> json) {
+    return Coordinates.fromJson(json);
   }
 }
 
 /// @nodoc
 // ignore: unused_element
-const $Coord = _$CoordTearOff();
+const $Coordinates = _$CoordinatesTearOff();
 
 /// @nodoc
-mixin _$Coord {
+mixin _$Coordinates {
   num get lat;
   num get lon;
 
   Map<String, dynamic> toJson();
   @JsonKey(ignore: true)
-  $CoordCopyWith<Coord> get copyWith;
+  $CoordinatesCopyWith<Coordinates> get copyWith;
 }
 
 /// @nodoc
-abstract class $CoordCopyWith<$Res> {
-  factory $CoordCopyWith(Coord value, $Res Function(Coord) then) =
-      _$CoordCopyWithImpl<$Res>;
+abstract class $CoordinatesCopyWith<$Res> {
+  factory $CoordinatesCopyWith(
+          Coordinates value, $Res Function(Coordinates) then) =
+      _$CoordinatesCopyWithImpl<$Res>;
   $Res call({num lat, num lon});
 }
 
 /// @nodoc
-class _$CoordCopyWithImpl<$Res> implements $CoordCopyWith<$Res> {
-  _$CoordCopyWithImpl(this._value, this._then);
+class _$CoordinatesCopyWithImpl<$Res> implements $CoordinatesCopyWith<$Res> {
+  _$CoordinatesCopyWithImpl(this._value, this._then);
 
-  final Coord _value;
+  final Coordinates _value;
   // ignore: unused_field
-  final $Res Function(Coord) _then;
+  final $Res Function(Coordinates) _then;
 
   @override
   $Res call({
@@ -431,28 +432,31 @@ class _$CoordCopyWithImpl<$Res> implements $CoordCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$CoordCopyWith<$Res> implements $CoordCopyWith<$Res> {
-  factory _$CoordCopyWith(_Coord value, $Res Function(_Coord) then) =
-      __$CoordCopyWithImpl<$Res>;
+abstract class _$CoordinatesCopyWith<$Res>
+    implements $CoordinatesCopyWith<$Res> {
+  factory _$CoordinatesCopyWith(
+          _Coordinates value, $Res Function(_Coordinates) then) =
+      __$CoordinatesCopyWithImpl<$Res>;
   @override
   $Res call({num lat, num lon});
 }
 
 /// @nodoc
-class __$CoordCopyWithImpl<$Res> extends _$CoordCopyWithImpl<$Res>
-    implements _$CoordCopyWith<$Res> {
-  __$CoordCopyWithImpl(_Coord _value, $Res Function(_Coord) _then)
-      : super(_value, (v) => _then(v as _Coord));
+class __$CoordinatesCopyWithImpl<$Res> extends _$CoordinatesCopyWithImpl<$Res>
+    implements _$CoordinatesCopyWith<$Res> {
+  __$CoordinatesCopyWithImpl(
+      _Coordinates _value, $Res Function(_Coordinates) _then)
+      : super(_value, (v) => _then(v as _Coordinates));
 
   @override
-  _Coord get _value => super._value as _Coord;
+  _Coordinates get _value => super._value as _Coordinates;
 
   @override
   $Res call({
     Object lat = freezed,
     Object lon = freezed,
   }) {
-    return _then(_Coord(
+    return _then(_Coordinates(
       lat == freezed ? _value.lat : lat as num,
       lon == freezed ? _value.lon : lon as num,
     ));
@@ -462,13 +466,13 @@ class __$CoordCopyWithImpl<$Res> extends _$CoordCopyWithImpl<$Res>
 @JsonSerializable()
 
 /// @nodoc
-class _$_Coord implements _Coord {
-  const _$_Coord(this.lat, this.lon)
+class _$_Coordinates implements _Coordinates {
+  const _$_Coordinates(this.lat, this.lon)
       : assert(lat != null),
         assert(lon != null);
 
-  factory _$_Coord.fromJson(Map<String, dynamic> json) =>
-      _$_$_CoordFromJson(json);
+  factory _$_Coordinates.fromJson(Map<String, dynamic> json) =>
+      _$_$_CoordinatesFromJson(json);
 
   @override
   final num lat;
@@ -477,13 +481,13 @@ class _$_Coord implements _Coord {
 
   @override
   String toString() {
-    return 'Coord(lat: $lat, lon: $lon)';
+    return 'Coordinates(lat: $lat, lon: $lon)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Coord &&
+        (other is _Coordinates &&
             (identical(other.lat, lat) ||
                 const DeepCollectionEquality().equals(other.lat, lat)) &&
             (identical(other.lon, lon) ||
@@ -498,19 +502,20 @@ class _$_Coord implements _Coord {
 
   @JsonKey(ignore: true)
   @override
-  _$CoordCopyWith<_Coord> get copyWith =>
-      __$CoordCopyWithImpl<_Coord>(this, _$identity);
+  _$CoordinatesCopyWith<_Coordinates> get copyWith =>
+      __$CoordinatesCopyWithImpl<_Coordinates>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_CoordToJson(this);
+    return _$_$_CoordinatesToJson(this);
   }
 }
 
-abstract class _Coord implements Coord {
-  const factory _Coord(num lat, num lon) = _$_Coord;
+abstract class _Coordinates implements Coordinates {
+  const factory _Coordinates(num lat, num lon) = _$_Coordinates;
 
-  factory _Coord.fromJson(Map<String, dynamic> json) = _$_Coord.fromJson;
+  factory _Coordinates.fromJson(Map<String, dynamic> json) =
+      _$_Coordinates.fromJson;
 
   @override
   num get lat;
@@ -518,7 +523,7 @@ abstract class _Coord implements Coord {
   num get lon;
   @override
   @JsonKey(ignore: true)
-  _$CoordCopyWith<_Coord> get copyWith;
+  _$CoordinatesCopyWith<_Coordinates> get copyWith;
 }
 
 Weather _$WeatherFromJson(Map<String, dynamic> json) {
@@ -670,11 +675,12 @@ class _$MainTearOff {
   const _$MainTearOff();
 
 // ignore: unused_element
-  _Main call(num temp, num temp_min, num temp_max, num pressure, num humidity) {
+  _Main call(num temp, @JsonKey(name: 'temp_min') num tempMin,
+      @JsonKey(name: 'temp_max') num tempMax, num pressure, num humidity) {
     return _Main(
       temp,
-      temp_min,
-      temp_max,
+      tempMin,
+      tempMax,
       pressure,
       humidity,
     );
@@ -693,8 +699,10 @@ const $Main = _$MainTearOff();
 /// @nodoc
 mixin _$Main {
   num get temp;
-  num get temp_min;
-  num get temp_max;
+  @JsonKey(name: 'temp_min')
+  num get tempMin;
+  @JsonKey(name: 'temp_max')
+  num get tempMax;
   num get pressure;
   num get humidity;
 
@@ -707,7 +715,12 @@ mixin _$Main {
 abstract class $MainCopyWith<$Res> {
   factory $MainCopyWith(Main value, $Res Function(Main) then) =
       _$MainCopyWithImpl<$Res>;
-  $Res call({num temp, num temp_min, num temp_max, num pressure, num humidity});
+  $Res call(
+      {num temp,
+      @JsonKey(name: 'temp_min') num tempMin,
+      @JsonKey(name: 'temp_max') num tempMax,
+      num pressure,
+      num humidity});
 }
 
 /// @nodoc
@@ -721,15 +734,15 @@ class _$MainCopyWithImpl<$Res> implements $MainCopyWith<$Res> {
   @override
   $Res call({
     Object temp = freezed,
-    Object temp_min = freezed,
-    Object temp_max = freezed,
+    Object tempMin = freezed,
+    Object tempMax = freezed,
     Object pressure = freezed,
     Object humidity = freezed,
   }) {
     return _then(_value.copyWith(
       temp: temp == freezed ? _value.temp : temp as num,
-      temp_min: temp_min == freezed ? _value.temp_min : temp_min as num,
-      temp_max: temp_max == freezed ? _value.temp_max : temp_max as num,
+      tempMin: tempMin == freezed ? _value.tempMin : tempMin as num,
+      tempMax: tempMax == freezed ? _value.tempMax : tempMax as num,
       pressure: pressure == freezed ? _value.pressure : pressure as num,
       humidity: humidity == freezed ? _value.humidity : humidity as num,
     ));
@@ -741,7 +754,12 @@ abstract class _$MainCopyWith<$Res> implements $MainCopyWith<$Res> {
   factory _$MainCopyWith(_Main value, $Res Function(_Main) then) =
       __$MainCopyWithImpl<$Res>;
   @override
-  $Res call({num temp, num temp_min, num temp_max, num pressure, num humidity});
+  $Res call(
+      {num temp,
+      @JsonKey(name: 'temp_min') num tempMin,
+      @JsonKey(name: 'temp_max') num tempMax,
+      num pressure,
+      num humidity});
 }
 
 /// @nodoc
@@ -756,15 +774,15 @@ class __$MainCopyWithImpl<$Res> extends _$MainCopyWithImpl<$Res>
   @override
   $Res call({
     Object temp = freezed,
-    Object temp_min = freezed,
-    Object temp_max = freezed,
+    Object tempMin = freezed,
+    Object tempMax = freezed,
     Object pressure = freezed,
     Object humidity = freezed,
   }) {
     return _then(_Main(
       temp == freezed ? _value.temp : temp as num,
-      temp_min == freezed ? _value.temp_min : temp_min as num,
-      temp_max == freezed ? _value.temp_max : temp_max as num,
+      tempMin == freezed ? _value.tempMin : tempMin as num,
+      tempMax == freezed ? _value.tempMax : tempMax as num,
       pressure == freezed ? _value.pressure : pressure as num,
       humidity == freezed ? _value.humidity : humidity as num,
     ));
@@ -775,11 +793,11 @@ class __$MainCopyWithImpl<$Res> extends _$MainCopyWithImpl<$Res>
 
 /// @nodoc
 class _$_Main implements _Main {
-  const _$_Main(
-      this.temp, this.temp_min, this.temp_max, this.pressure, this.humidity)
+  const _$_Main(this.temp, @JsonKey(name: 'temp_min') this.tempMin,
+      @JsonKey(name: 'temp_max') this.tempMax, this.pressure, this.humidity)
       : assert(temp != null),
-        assert(temp_min != null),
-        assert(temp_max != null),
+        assert(tempMin != null),
+        assert(tempMax != null),
         assert(pressure != null),
         assert(humidity != null);
 
@@ -789,9 +807,11 @@ class _$_Main implements _Main {
   @override
   final num temp;
   @override
-  final num temp_min;
+  @JsonKey(name: 'temp_min')
+  final num tempMin;
   @override
-  final num temp_max;
+  @JsonKey(name: 'temp_max')
+  final num tempMax;
   @override
   final num pressure;
   @override
@@ -799,7 +819,7 @@ class _$_Main implements _Main {
 
   @override
   String toString() {
-    return 'Main(temp: $temp, temp_min: $temp_min, temp_max: $temp_max, pressure: $pressure, humidity: $humidity)';
+    return 'Main(temp: $temp, tempMin: $tempMin, tempMax: $tempMax, pressure: $pressure, humidity: $humidity)';
   }
 
   @override
@@ -808,12 +828,12 @@ class _$_Main implements _Main {
         (other is _Main &&
             (identical(other.temp, temp) ||
                 const DeepCollectionEquality().equals(other.temp, temp)) &&
-            (identical(other.temp_min, temp_min) ||
+            (identical(other.tempMin, tempMin) ||
                 const DeepCollectionEquality()
-                    .equals(other.temp_min, temp_min)) &&
-            (identical(other.temp_max, temp_max) ||
+                    .equals(other.tempMin, tempMin)) &&
+            (identical(other.tempMax, tempMax) ||
                 const DeepCollectionEquality()
-                    .equals(other.temp_max, temp_max)) &&
+                    .equals(other.tempMax, tempMax)) &&
             (identical(other.pressure, pressure) ||
                 const DeepCollectionEquality()
                     .equals(other.pressure, pressure)) &&
@@ -826,8 +846,8 @@ class _$_Main implements _Main {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(temp) ^
-      const DeepCollectionEquality().hash(temp_min) ^
-      const DeepCollectionEquality().hash(temp_max) ^
+      const DeepCollectionEquality().hash(tempMin) ^
+      const DeepCollectionEquality().hash(tempMax) ^
       const DeepCollectionEquality().hash(pressure) ^
       const DeepCollectionEquality().hash(humidity);
 
@@ -844,17 +864,22 @@ class _$_Main implements _Main {
 
 abstract class _Main implements Main {
   const factory _Main(
-          num temp, num temp_min, num temp_max, num pressure, num humidity) =
-      _$_Main;
+      num temp,
+      @JsonKey(name: 'temp_min') num tempMin,
+      @JsonKey(name: 'temp_max') num tempMax,
+      num pressure,
+      num humidity) = _$_Main;
 
   factory _Main.fromJson(Map<String, dynamic> json) = _$_Main.fromJson;
 
   @override
   num get temp;
   @override
-  num get temp_min;
+  @JsonKey(name: 'temp_min')
+  num get tempMin;
   @override
-  num get temp_max;
+  @JsonKey(name: 'temp_max')
+  num get tempMax;
   @override
   num get pressure;
   @override
@@ -1011,11 +1036,11 @@ class _$SysTearOff {
   const _$SysTearOff();
 
 // ignore: unused_element
-  _Sys call(String country, int sunrise, int sunset) {
+  _Sys call(int sunrise, int sunset, [String country = null]) {
     return _Sys(
-      country,
       sunrise,
       sunset,
+      country,
     );
   }
 
@@ -1031,9 +1056,9 @@ const $Sys = _$SysTearOff();
 
 /// @nodoc
 mixin _$Sys {
-  String get country;
   int get sunrise;
   int get sunset;
+  String get country;
 
   Map<String, dynamic> toJson();
   @JsonKey(ignore: true)
@@ -1044,7 +1069,7 @@ mixin _$Sys {
 abstract class $SysCopyWith<$Res> {
   factory $SysCopyWith(Sys value, $Res Function(Sys) then) =
       _$SysCopyWithImpl<$Res>;
-  $Res call({String country, int sunrise, int sunset});
+  $Res call({int sunrise, int sunset, String country});
 }
 
 /// @nodoc
@@ -1057,14 +1082,14 @@ class _$SysCopyWithImpl<$Res> implements $SysCopyWith<$Res> {
 
   @override
   $Res call({
-    Object country = freezed,
     Object sunrise = freezed,
     Object sunset = freezed,
+    Object country = freezed,
   }) {
     return _then(_value.copyWith(
-      country: country == freezed ? _value.country : country as String,
       sunrise: sunrise == freezed ? _value.sunrise : sunrise as int,
       sunset: sunset == freezed ? _value.sunset : sunset as int,
+      country: country == freezed ? _value.country : country as String,
     ));
   }
 }
@@ -1074,7 +1099,7 @@ abstract class _$SysCopyWith<$Res> implements $SysCopyWith<$Res> {
   factory _$SysCopyWith(_Sys value, $Res Function(_Sys) then) =
       __$SysCopyWithImpl<$Res>;
   @override
-  $Res call({String country, int sunrise, int sunset});
+  $Res call({int sunrise, int sunset, String country});
 }
 
 /// @nodoc
@@ -1088,14 +1113,14 @@ class __$SysCopyWithImpl<$Res> extends _$SysCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object country = freezed,
     Object sunrise = freezed,
     Object sunset = freezed,
+    Object country = freezed,
   }) {
     return _then(_Sys(
-      country == freezed ? _value.country : country as String,
       sunrise == freezed ? _value.sunrise : sunrise as int,
       sunset == freezed ? _value.sunset : sunset as int,
+      country == freezed ? _value.country : country as String,
     ));
   }
 }
@@ -1104,45 +1129,45 @@ class __$SysCopyWithImpl<$Res> extends _$SysCopyWithImpl<$Res>
 
 /// @nodoc
 class _$_Sys implements _Sys {
-  const _$_Sys(this.country, this.sunrise, this.sunset)
-      : assert(country != null),
-        assert(sunrise != null),
-        assert(sunset != null);
+  const _$_Sys(this.sunrise, this.sunset, [this.country = null])
+      : assert(sunrise != null),
+        assert(sunset != null),
+        assert(country != null);
 
   factory _$_Sys.fromJson(Map<String, dynamic> json) => _$_$_SysFromJson(json);
 
   @override
-  final String country;
-  @override
   final int sunrise;
   @override
   final int sunset;
+  @JsonKey(defaultValue: null)
+  @override
+  final String country;
 
   @override
   String toString() {
-    return 'Sys(country: $country, sunrise: $sunrise, sunset: $sunset)';
+    return 'Sys(sunrise: $sunrise, sunset: $sunset, country: $country)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _Sys &&
-            (identical(other.country, country) ||
-                const DeepCollectionEquality()
-                    .equals(other.country, country)) &&
             (identical(other.sunrise, sunrise) ||
                 const DeepCollectionEquality()
                     .equals(other.sunrise, sunrise)) &&
             (identical(other.sunset, sunset) ||
-                const DeepCollectionEquality().equals(other.sunset, sunset)));
+                const DeepCollectionEquality().equals(other.sunset, sunset)) &&
+            (identical(other.country, country) ||
+                const DeepCollectionEquality().equals(other.country, country)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(country) ^
       const DeepCollectionEquality().hash(sunrise) ^
-      const DeepCollectionEquality().hash(sunset);
+      const DeepCollectionEquality().hash(sunset) ^
+      const DeepCollectionEquality().hash(country);
 
   @JsonKey(ignore: true)
   @override
@@ -1156,16 +1181,16 @@ class _$_Sys implements _Sys {
 }
 
 abstract class _Sys implements Sys {
-  const factory _Sys(String country, int sunrise, int sunset) = _$_Sys;
+  const factory _Sys(int sunrise, int sunset, [String country]) = _$_Sys;
 
   factory _Sys.fromJson(Map<String, dynamic> json) = _$_Sys.fromJson;
 
   @override
-  String get country;
-  @override
   int get sunrise;
   @override
   int get sunset;
+  @override
+  String get country;
   @override
   @JsonKey(ignore: true)
   _$SysCopyWith<_Sys> get copyWith;

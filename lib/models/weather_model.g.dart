@@ -10,7 +10,7 @@ _$_WeatherData _$_$_WeatherDataFromJson(Map<String, dynamic> json) {
   return _$_WeatherData(
     json['coord'] == null
         ? null
-        : Coord.fromJson(json['coord'] as Map<String, dynamic>),
+        : Coordinates.fromJson(json['coord'] as Map<String, dynamic>),
     (json['weather'] as List)
         ?.map((e) =>
             e == null ? null : Weather.fromJson(e as Map<String, dynamic>))
@@ -46,14 +46,15 @@ Map<String, dynamic> _$_$_WeatherDataToJson(_$_WeatherData instance) =>
       'cod': instance.cod,
     };
 
-_$_Coord _$_$_CoordFromJson(Map<String, dynamic> json) {
-  return _$_Coord(
+_$_Coordinates _$_$_CoordinatesFromJson(Map<String, dynamic> json) {
+  return _$_Coordinates(
     json['lat'] as num,
     json['lon'] as num,
   );
 }
 
-Map<String, dynamic> _$_$_CoordToJson(_$_Coord instance) => <String, dynamic>{
+Map<String, dynamic> _$_$_CoordinatesToJson(_$_Coordinates instance) =>
+    <String, dynamic>{
       'lat': instance.lat,
       'lon': instance.lon,
     };
@@ -81,8 +82,8 @@ _$_Main _$_$_MainFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$_$_MainToJson(_$_Main instance) => <String, dynamic>{
       'temp': instance.temp,
-      'temp_min': instance.temp_min,
-      'temp_max': instance.temp_max,
+      'temp_min': instance.tempMin,
+      'temp_max': instance.tempMax,
       'pressure': instance.pressure,
       'humidity': instance.humidity,
     };
@@ -99,14 +100,14 @@ Map<String, dynamic> _$_$_WindToJson(_$_Wind instance) => <String, dynamic>{
 
 _$_Sys _$_$_SysFromJson(Map<String, dynamic> json) {
   return _$_Sys(
-    json['country'] as String,
     json['sunrise'] as int,
     json['sunset'] as int,
+    json['country'] as String,
   );
 }
 
 Map<String, dynamic> _$_$_SysToJson(_$_Sys instance) => <String, dynamic>{
-      'country': instance.country,
       'sunrise': instance.sunrise,
       'sunset': instance.sunset,
+      'country': instance.country,
     };

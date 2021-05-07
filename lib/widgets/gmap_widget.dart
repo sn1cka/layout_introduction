@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MyGoogleMap extends StatefulWidget {
-  MyGoogleMap(this.lat, this.lon, {this.onCoordsChanged});
+  MyGoogleMap(this.lat, this.lon, {@required this.onCoordsChanged});
 
   final Function(double, double) onCoordsChanged;
 
@@ -15,8 +15,15 @@ class MyGoogleMap extends StatefulWidget {
 }
 
 class _MyGoogleMapState extends State<MyGoogleMap> {
+  _MyGoogleMapState(this.lat, this.lon, this.onCoordsChanged);
+
   GoogleMapController mapController;
   final Function(double, double) onCoordsChanged;
+
+  double lat;
+  double lon;
+  GoogleMap gmap;
+  Widget child = CircularProgressIndicator();
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -24,22 +31,14 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(zoom: 16, target: LatLng(lat, lon))));
   }
 
-  _MyGoogleMapState(this.lat, this.lon, this.onCoordsChanged);
-
-  double lat;
-  double lon;
-  GoogleMap gmap;
-  Widget child = CircularProgressIndicator();
-
   @override
   Widget build(BuildContext context) {
-
     return GoogleMap(
         markers: {Marker(markerId: MarkerId('1'), position: LatLng(lat, lon))},
-        onTap: (argument)async {
+        onTap: (argument) async {
           lat = argument.latitude;
           lon = argument.longitude;
-          mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: argument,zoom: 16)));
+          mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: argument, zoom: 16)));
           onCoordsChanged(lat, lon);
           setState(() {});
         },

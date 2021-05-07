@@ -11,10 +11,10 @@ import 'package:layout_introduction/bloc/weather_bloc.dart';
 import 'package:layout_introduction/widgets/gmap_widget.dart';
 import 'package:layout_introduction/widgets/weather_details_container.dart';
 
+//todo fix to freezed can accept nullable values
 //todo rework whole class to code beatify
 //todo add GMap key
 //todo change name in IOS
-//todo Add freezed
 //todo make to refresh starts and stops refreshIndicator
 
 void main() async {

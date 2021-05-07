@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:layout_introduction/models/weather_model.dart';
 import 'package:retrofit/retrofit.dart';
 
-
 part 'api.g.dart';
 
 class Apis {

@@ -21,8 +21,8 @@ class _WeatherDetailsState extends State<WeatherDetails> {
 
     this.weatherState = data.weather.first.description;
     this._temp = main.temp.toInt();
-    this._tempMax = main.temp_max;
-    this._tempMin = main.temp_min;
+    this._tempMax = main.tempMax;
+    this._tempMin = main.tempMin;
     this._windSpeed = wind.speed;
     this._airHumidity = main.humidity;
     this._pressure = main.pressure;
