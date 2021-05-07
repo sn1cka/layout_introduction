@@ -18,7 +18,7 @@ class _ApiClient implements ApiClient {
 
   @override
   Future<DetailedWeatherDataModel> getWeather(latitude, longitude,
-      {lang = "ru", units = "metric"}) async {
+      {lang = 'ru', units = 'metric'}) async {
     ArgumentError.checkNotNull(latitude, 'latitude');
     ArgumentError.checkNotNull(longitude, 'longitude');
     const _extra = <String, dynamic>{};

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:layout_introduction/api/api.dart';
 import 'package:layout_introduction/bloc/weather_bloc.dart';
@@ -11,7 +13,6 @@ import 'package:layout_introduction/widgets/gmap_widget.dart';
 import 'package:layout_introduction/widgets/weather_details_container.dart';
 
 //todo rework whole class to code beatify
-//todo add hive
 
 class SimpleBlocDelegate extends BlocObserver {
   @override
@@ -22,6 +23,8 @@ class SimpleBlocDelegate extends BlocObserver {
 }
 
 void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox('MyBox');
   Bloc.observer = SimpleBlocDelegate();
   final ApiClient repo = ApiClient(Dio());
   runApp(MyApp(repo: repo));
@@ -37,6 +40,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -56,12 +65,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var box = Hive.box('MyBox');
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   var dateTimeNow = DateFormat('EEEE, dd MMMM yyyy | HH:mm').format(DateTime.now());
   var lat = 42.88208;
   var lon = 74.582;
-  var currentLoc = '';
-  LatLng position = LatLng(42.88208, 74.582);
+  var currentLoc = 'KG, Бишкек';
+
+  @override
+  void initState() {
+    lat = box.get('lat');
+    lon = box.get('lon');
+    currentLoc = box.get('location');
+    super.initState();
+  }
+
+  void saveCache() {
+    box.put('lat', lat);
+    box.put('lon', lon);
+    box.put('location', currentLoc);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +99,11 @@ class _HomePageState extends State<HomePage> {
                 BlocProvider.of<WeatherBloc>(context).add(LoadWeatherEvent(lat, lon));
               }
               if (state is WeatherLoaded) {
-                print(state.weather.toJson());
                 currentLoc = '${state.weather.sys.country}, ${state.weather.name}';
                 detailedWeather = WeatherDetails(state.weather);
+                this.lon = state.weather.coord.lon;
+                this.lat = state.weather.coord.lat;
+                saveCache();
               } else
                 detailedWeather = CircularProgressIndicator();
 
@@ -131,10 +156,10 @@ class _HomePageState extends State<HomePage> {
                                                   lat,
                                                   lon,
                                                   onCoordsChanged: (lat, lon) async {
-                                                    BlocProvider.of<WeatherBloc>(context)
-                                                        .add(LoadWeatherEvent(lat, lon));
                                                     this.lat = lat;
                                                     this.lon = lon;
+                                                    BlocProvider.of<WeatherBloc>(context)
+                                                        .add(LoadWeatherEvent(lat, lon));
                                                     print('Coords changed: $lat  $lon');
                                                     await Future.delayed(Duration(milliseconds: 1000));
                                                     Navigator.pop(mContext);

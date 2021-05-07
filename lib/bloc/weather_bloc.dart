@@ -17,6 +17,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   Stream<WeatherState> mapEventToState(
     WeatherEvent event,
   ) async* {
+
     if (event is LoadWeatherEvent) {
       yield WeatherLoading();
       try {
@@ -29,5 +30,10 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         yield WeatherLoadingError();
       }
     }
+  }
+  @override
+  void onTransition(Transition<WeatherEvent, WeatherState> transition) {
+    print(transition);
+    super.onTransition(transition);
   }
 }
