@@ -39,6 +39,7 @@ dependencies:
   intl: ^0.17.0
   google_maps_flutter: ^2.0.3
   equatable: ^2.0.0
+  freezed: ^0.12.7
 
 
 dev_dependencies:

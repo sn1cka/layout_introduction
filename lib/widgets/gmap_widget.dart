@@ -21,7 +21,7 @@ class _MyGoogleMapState extends State<MyGoogleMap> {
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     child = gmap;
-    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(zoom: 20, target: LatLng(lat, lon))));
+    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(zoom: 16, target: LatLng(lat, lon))));
   }
 
   _MyGoogleMapState(this.lat, this.lon, this.onCoordsChanged);

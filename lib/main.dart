@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
@@ -13,14 +12,10 @@ import 'package:layout_introduction/widgets/gmap_widget.dart';
 import 'package:layout_introduction/widgets/weather_details_container.dart';
 
 //todo rework whole class to code beatify
-
-class SimpleBlocDelegate extends BlocObserver {
-  @override
-  void onTransition(Bloc bloc, Transition transition) {
-    super.onTransition(bloc, transition);
-    print('bloc transition');
-  }
-}
+//todo add GMap key
+//todo change name in IOS
+//todo Add freezed
+//todo make to refresh starts and stops refreshIndicator
 
 void main() async {
   await Hive.initFlutter();
@@ -67,23 +62,28 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var box = Hive.box('MyBox');
   var refreshKey = GlobalKey<RefreshIndicatorState>();
-  var dateTimeNow = DateFormat('EEEE, dd MMMM yyyy | HH:mm').format(DateTime.now());
+  var currentDateTime = DateFormat('EEEE, dd MMMM yyyy | HH:mm').format(DateTime.now());
   var lat = 42.88208;
   var lon = 74.582;
   var currentLoc = 'KG, Бишкек';
 
   @override
   void initState() {
-    lat = box.get('lat');
-    lon = box.get('lon');
-    currentLoc = box.get('location');
+    lat ??= box.get('lat');
+    lon ??= box.get('lon');
+    currentLoc ??= box.get('location');
     super.initState();
   }
 
-  void saveCache() {
+  void _saveCache() {
     box.put('lat', lat);
     box.put('lon', lon);
     box.put('location', currentLoc);
+  }
+
+  void _getWeather(context){
+    BlocProvider.of<WeatherBloc>(context)
+        .add(LoadWeatherEvent(lat, lon));
   }
 
   @override
@@ -96,21 +96,21 @@ class _HomePageState extends State<HomePage> {
             child: BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
               Widget detailedWeather;
               if (state is WeatherEmpty) {
-                BlocProvider.of<WeatherBloc>(context).add(LoadWeatherEvent(lat, lon));
+                _getWeather(context);
               }
               if (state is WeatherLoaded) {
                 currentLoc = '${state.weather.sys.country}, ${state.weather.name}';
                 detailedWeather = WeatherDetails(state.weather);
                 this.lon = state.weather.coord.lon;
                 this.lat = state.weather.coord.lat;
-                saveCache();
+                _saveCache();
               } else
-                detailedWeather = CircularProgressIndicator();
+                detailedWeather = Center(child: CircularProgressIndicator());
 
               return RefreshIndicator(
                   key: refreshKey,
                   onRefresh: () async {
-                    BlocProvider.of<WeatherBloc>(context).add(LoadWeatherEvent(lat, lon));
+                    _getWeather(context);
                     refreshKey.currentState.show(atTop: false);
                   },
                   child: ListView(physics: AlwaysScrollableScrollPhysics(), children: [
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                                         child: TextButton(
                                             onPressed: () {},
                                             child: Text(
-                                              dateTimeNow,
+                                              currentDateTime,
                                               style: TextStyle(fontSize: 14),
                                             ))),
                                     Expanded(
@@ -158,9 +158,7 @@ class _HomePageState extends State<HomePage> {
                                                   onCoordsChanged: (lat, lon) async {
                                                     this.lat = lat;
                                                     this.lon = lon;
-                                                    BlocProvider.of<WeatherBloc>(context)
-                                                        .add(LoadWeatherEvent(lat, lon));
-                                                    print('Coords changed: $lat  $lon');
+                                                    _getWeather(context);
                                                     await Future.delayed(Duration(milliseconds: 1000));
                                                     Navigator.pop(mContext);
                                                   },

@@ -15,7 +15,7 @@ class WeatherLoading extends WeatherState {
 }
 
 class WeatherLoaded extends WeatherState {
-  final DetailedWeatherDataModel weather;
+  final WeatherData weather;
 
   const WeatherLoaded({@required this.weather}) : assert(weather != null);
 

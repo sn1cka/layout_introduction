@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:layout_introduction/models/detailed_weather_data_model.dart';
+import 'package:layout_introduction/models/weather_model.dart';
 
 import 'horizontal_weateher_details.dart';
 
 class WeatherDetails extends StatefulWidget {
   WeatherDetails(this.data);
 
-  final DetailedWeatherDataModel data;
+  final WeatherData data;
 
   @override
   _WeatherDetailsState createState() => _WeatherDetailsState(data);
@@ -21,8 +21,8 @@ class _WeatherDetailsState extends State<WeatherDetails> {
 
     this.weatherState = data.weather.first.description;
     this._temp = main.temp.toInt();
-    this._tempMax = main.tempMax;
-    this._tempMin = main.tempMin;
+    this._tempMax = main.temp_max;
+    this._tempMin = main.temp_min;
     this._windSpeed = wind.speed;
     this._airHumidity = main.humidity;
     this._pressure = main.pressure;
@@ -38,7 +38,7 @@ class _WeatherDetailsState extends State<WeatherDetails> {
     this._dayTime = '${time.hour}h ${time.minute}m ';
   }
 
-  final DetailedWeatherDataModel data;
+  final WeatherData data;
 
   String weatherState = '';
   num _temp = 27;
